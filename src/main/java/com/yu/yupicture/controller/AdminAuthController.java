@@ -1,6 +1,5 @@
 package com.yu.yupicture.controller;
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.yu.yupicture.annotation.AdminApiLog;
 import com.yu.yupicture.common.BaseResponse;
