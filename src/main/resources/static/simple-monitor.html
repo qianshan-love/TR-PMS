@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>极简系统监控</title>
+    <style>
+        body { font-family: "Microsoft YaHei"; padding: 30px; }
+        .status-item {
+            margin: 15px 0;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #3367d6; }
+        .title { color: #2d3748; font-size: 24px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="title">系统实时状态（点击按钮刷新）</div>
+<button onclick="fetchSystemStatus()">🔄 手动刷新状态</button>
+
+<div class="status-container">
+    <div class="status-item">CPU使用率：<span id="cpuUsage">加载中...</span></div>
+    <div class="status-item">JVM内存：<span id="jvmUsed">加载中...</span> / <span id="jvmMax">加载中...</span></div>
+    <div class="status-item">磁盘使用：<span id="disk">加载中...</span></div>
+    <div class="status-item">网络流量：入 <span id="netIn">加载中...</span> / 出 <span id="netOut">加载中...</span></div>
+</div>
+
+<script>
+    // 页面加载时自动获取一次状态
+    window.onload = fetchSystemStatus;
+
+    /**
+     * 调用后端接口获取实时状态
+     */
+    function fetchSystemStatus() {
+        // 注意：你的项目有context-path:/api，所以接口路径要加/api前缀
+        const apiUrl = 'localhost:8123/api/system/realtime';
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('接口请求失败');
+                return response.json();
+            })
+            .then(data => {
+                // 更新页面数据
+                document.getElementById('cpuUsage').textContent = data.cpuUsage;
+                document.getElementById('jvmUsed').textContent = data.jvmUsed;
+                document.getElementById('jvmMax').textContent = data.jvmMax;
+                document.getElementById('disk').textContent = data.disk;
+                document.getElementById('netIn').textContent = data.netIn;
+                document.getElementById('netOut').textContent = data.netOut;
+            })
+            .catch(error => {
+                console.error('获取状态失败：', error);
+                alert('获取系统状态失败，请检查后端是否启动！');
+            });
+    }
+</script>
+</body>
+</html>

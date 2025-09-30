@@ -1,0 +1,72 @@
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+    session:
+      cookie:
+        max-age: 2592000
+spring:
+  profiles:
+    active: local
+  application:
+    name: yu-picture
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/picture?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 2649940648
+    #设置文件最大上传体积
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  redis:
+    database: 0
+    host: localhost
+    password: 2649940648
+    port: 6379
+    timeout: 5000
+  session:
+    store-type: redis
+    timeout: 2592000
+  data:
+    mongodb:
+      admin:
+        uri: mongodb://127.0.0.1:27017/admin
+      lingsuo:
+        uri: mongodb://127.0.0.1:27017/lingsuo
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    profiles:
+      active: local
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%thread]){magenta} %clr(%-5level){%X{level-color} ====）~▄█▀█● ♡♥♥♡ } %clr(%logger{30}){cyan} : %msg%n"
+mybatis-plus:
+  configuration:
+    # 取消自动映射下划线到驼峰的规则
+    map-underscore-to-camel-case: false
+    # 正常输出日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除字段名
+      logic-delete-value: 1 # 逻辑已删除值
+      logic-not-delete-value: 0 # 逻辑未删除值
+knife4j:
+  enable: true
+  openapi:
+    group:
+      default:
+        group-name: 图库
+        api-rule: package
+        api-rule-resources:
+          - com.yu.yupicture.controller
+sa-token:
+  is-concurrent: false   # 开启并发登录（为 true 时允许同一账号多地同时登录，为 false 时新登录挤掉旧登录）
+  max-login-count: 1     # 同一账号最大登录数量，-1 表示不限制
+  timeout: 7200          # 登录有效期（单位：秒），2小时，-1 表示永久有效
+management:
+  metrics:
+    enabled: true # 启用Actuator指标采集（核心配置）
